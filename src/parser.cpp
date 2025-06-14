@@ -70,3 +70,49 @@ std::unique_ptr<Stmt> Parser::expressionStatement() {
   consume(Token::Type::Semicolon, "Expected ';' after expression");
   return std::make_unique<ExprStmt>(std::move(expr));
 }
+
+std::unique_ptr<Expr> Parser::expression() {
+  return term();
+}
+
+std::unique_ptr<Expr> Parser::term() {
+  std::unique_ptr<Expr> expr = factor();
+
+  while (match({Token::Type::Plus, Token::Type::Minus})) {
+    Token op = previous();
+    std::unique_ptr<Expr> right = factor();
+    expr = std::make_unique<BinaryExpr>(std::move(expr), op, std::move(right));
+  }
+
+  return expr;
+}
+
+std::unique_ptr<Expr> Parser::factor() {
+  std::unique_ptr<Expr> expr = primary();
+
+  while (match({Token::Type::Star, Token::Type::Slash})) {
+    Token op = previous;
+    std::unique_ptr<Expr> right = primary();
+    expr = std::make_unique<BinaryExpr>(std::move(expr), op, std::move(right));
+  }
+
+  return expr;
+}
+
+std::unique_ptr<Expr> Parser::primary() {
+  if (match({Token::Type::Number})) {
+    return std::make_unique<LiteralExpr>(previous().lexeme);
+  }
+
+  if (match({Token::Type::Identifier})) {
+    return std::make_unique<VariableExpr>(previous());
+  }
+
+  if (match({Token::Type::LeftParen})) {
+    std::unique_ptr<Expr> expr = expression();
+    consume(Token::Type::RightParen, "Expected ')' after expression.");
+    return expr;
+  }
+
+  throw std::runtime_error("Expected expression");
+}
