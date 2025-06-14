@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <memory>
-#include <Token.h>
+#include <token.h>
 #include <Expr.h>
 
 class Parser {
