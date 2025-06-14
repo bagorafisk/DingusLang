@@ -12,6 +12,8 @@ include_directories(include)
 set(SOURCES
     src/main.cpp
     src/lexer.cpp
+    src/parser.cpp
+    src/astPrinter.cpp
 )
 
 # Create executable
