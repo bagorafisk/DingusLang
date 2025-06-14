@@ -8,38 +8,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-
-struct Token {
-  enum class Type {
-    // Keywords
-    Let,
-    Print,
-    
-    // Literals
-    Identifier,
-    Number,
-
-    // Operators
-    Equals,
-    Plus,
-    Minus,
-    Star,
-    Slash,
-
-    // Symbols
-    LeftParen,
-    RightParen,
-    Semicolon,
-
-    // Control
-    EndOfFile,
-    Unknown
-  };
-
-  Type type;
-
-  std::string lexeme;
-};
+#include <token.h>
 
 std::vector<Token> tokenize(const std::string& source);
 bool isDigit(char c);
