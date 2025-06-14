@@ -12,7 +12,7 @@ struct Expr {
 
 struct LiteralExpr : Expr {
   double value;
-  NumberExpr(double val) : value(val) {}
+  LiteralExpr(double val) : value(val) {}
 };
 
 struct VariableExpr : Expr {
