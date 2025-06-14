@@ -39,3 +39,34 @@ const Token& Parser::consume(Token::Type type, const std::string& message) {
   if (check(type)) return advance();
   throw std::runtime_error("Parse error: " + message);
 }
+
+std::vector<std::unique_ptr<Stmt>> Parser::parse() {
+  std::vector<std::unique_ptr<Stmt>> statements;
+  while (!isAtEnd()) {
+    statements.push_back(statement());
+  }
+  return statements;
+}
+
+std::unique_ptr<Stmt> Parser::statement() {
+  if(match({Token::Type::Decl})) return varDeclaration();
+  return expressionStatement();
+}
+
+std::unique_ptr<Stmt> Parser::varDeclaration() {
+  Token name = consume(Token::Type::Identifier, "Expected variable name after 'decl'.");
+
+  consume(Token::Type::Equals, "Expected '=' after a variable name.");
+
+  std::unique_ptr<Expr> initializer = expression();
+
+  consume(Token::Type::Semicolon, "Expected ';' after variable declaration.");
+
+  return std::make_unique<VarDecl>(name, std::move(initializer));
+}
+
+std::unique_ptr<Stmt> Parser::expressionStatement() {
+  std::unique_ptr<Expr> expr = expression();
+  consume(Token::Type::Semicolon, "Expected ';' after expression");
+  return std::make_unique<ExprStmt>(std::move(expr));
+}
