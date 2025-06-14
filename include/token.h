@@ -4,7 +4,7 @@
 struct Token {
   enum class Type {
     // Keywords
-    Let,
+    Decl,
     Print,
     
     // Literals

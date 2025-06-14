@@ -10,7 +10,7 @@ bool isAlpha(char c) {
 
 std::string toString(Token::Type type) {
   switch (type) {
-    case Token::Type::Let: return "Let";
+    case Token::Type::Decl: return "Decl";
     case Token::Type::Print: return "Print";
     case Token::Type::Identifier: return "Identifier";
     case Token::Type::Number: return "Number";
@@ -45,7 +45,7 @@ std::vector<Token> tokenize(const std::string& source) {
         while (i < source.size() && (isAlpha(source[i]) || isDigit(source[i]))) i++;
         std::string word = source.substr(start, i - start);
         if (word == "let") {
-            tokens.push_back({Token::Type::Let, word});
+            tokens.push_back({Token::Type::Decl, word});
         } else if (word == "print") {
             tokens.push_back({Token::Type::Print, word});
         } else {
